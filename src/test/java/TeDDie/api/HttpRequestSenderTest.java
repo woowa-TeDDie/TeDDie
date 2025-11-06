@@ -6,6 +6,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import java.io.IOException;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -61,5 +62,26 @@ public class HttpRequestSenderTest {
         assertThatThrownBy(() -> sender.post(mockUrl, dummyRequestBody))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("500");
+    }
+
+    @DisplayName("POST 요청 시 올바른 메서드, 헤더, 본문 전송")
+    @Test
+    void POST_요청_시_올바른_메서드_헤더_본문_전송() throws Exception {
+        //given
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .setBody("{\"response\":\"ok\"}")
+        );
+        String mockUrl = mockWebServer.url("/").toString();
+        String input = "{\"prompt\":\"this is body\"}";
+
+        //when
+        sender.post(mockUrl, input);
+
+        //then
+        RecordedRequest request = mockWebServer.takeRequest();
+        assertThat(request.getMethod()).isEqualTo("POST");
+        assertThat(request.getHeader("Content-Type")).isEqualTo("application/json");
+        assertThat(request.getBody().readUtf8()).isEqualTo(input);
     }
 }
