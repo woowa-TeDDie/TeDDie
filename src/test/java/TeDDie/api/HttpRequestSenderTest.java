@@ -1,6 +1,7 @@
 package TeDDie.api;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import java.io.IOException;
 import okhttp3.mockwebserver.MockResponse;
@@ -43,5 +44,22 @@ public class HttpRequestSenderTest {
 
         //then
         assertThat(result).isEqualTo(expectedBody);
+    }
+
+    @DisplayName("서버가 500 에러 응답시 RuntimeException을 던짐")
+    @Test
+    void 서버가_500_에러_응답시_RuntimeException을_던짐() {
+        //given
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(500)
+                .setBody("Internal Server Error")
+        );
+        String mockUrl = mockWebServer.url("/").toString();
+        String dummyRequestBody = "{}";
+
+        //when&then
+        assertThatThrownBy(() -> sender.post(mockUrl, dummyRequestBody))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("500");
     }
 }
