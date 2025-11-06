@@ -25,6 +25,15 @@ public class HttpRequestSender {
                 HttpResponse.BodyHandlers
                 .ofString());
 
+        validateStatus(response);
         return response.body();
+    }
+
+    private void validateStatus(HttpResponse<String> response) {
+        int statusCode = response.statusCode();
+
+        if(statusCode < 200 || statusCode >= 300) {
+            throw new RuntimeException("HTTP Error Status: " + statusCode);
+        }
     }
 }
