@@ -5,6 +5,7 @@ import java.util.List;
 
 public class RequestBodyBuilder {
     private static final String DEFAULT_MODEL = "a.x-4.0-light";
+    private static final String SYSTEM_ROLE = "system";
     private static final String USER_ROLE = "user";
     private static final double DEFAULT_TEMPERATURE = 0.7;
     private static final int DEFAULT_MAX_TOKENS = 2000;
@@ -15,18 +16,19 @@ public class RequestBodyBuilder {
         this.gson = new Gson();
     }
 
-    public ApiRequest buildRequestObject(String prompt) {
-        ApiMessage message = new ApiMessage(USER_ROLE, prompt);
+    public ApiRequest buildRequestObject(String systemPrompt, String userPrompt) {
+        ApiMessage systemMessage = new ApiMessage(SYSTEM_ROLE, systemPrompt);
+        ApiMessage userMessage = new ApiMessage(USER_ROLE, userPrompt);
         return new ApiRequest(
                 DEFAULT_MODEL,
-                List.of(message),
+                List.of(systemMessage, userMessage),
                 DEFAULT_TEMPERATURE,
                 DEFAULT_MAX_TOKENS
         );
     }
 
-    public String createJSONBody(String prompt) {
-        ApiRequest request = buildRequestObject(prompt);
+    public String createJSONBody(String systemPrompt, String userPrompt) {
+        ApiRequest request = buildRequestObject(systemPrompt, userPrompt);
         return gson.toJson(request);
     }
 }
