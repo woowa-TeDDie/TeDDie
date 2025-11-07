@@ -18,34 +18,35 @@ public class RequestBodyBuilderTest {
     @Test
     void 프롬프트를_API_요청_객체로_변환() {
         //given
-        String prompt = "테스트 프롬프트";
+        String systemPrompt = "시스템 테스트 프롬프트";
+        String userPrompt = "유저 테스트 프롬프트";
 
         //when
-        ApiRequest request = builder.buildRequestObject(prompt);
+        ApiRequest request = builder.buildRequestObject(systemPrompt, userPrompt);
         ApiMessage message = request.messages().get(0);
 
         //then
         assertThat(request.model()).contains("a.x-4.0-light");
         assertThat(request.temperature()).isEqualTo(0.7);
         assertThat(request.max_tokens()).isEqualTo(2000);
-
         assertThat(message.role()).isEqualTo("user");
-        assertThat(message.content()).isEqualTo(prompt);
+        assertThat(message.content()).isEqualTo(userPrompt);
     }
 
-    @DisplayName("요청 객체를 JSON 문자열로 변환")
+    @DisplayName("요청 객체에 시스템과 유저 프롬프트를 추가하여 전송")
     @Test
-    void 요청_객체를_JSON_문자열로_변환() {
+    void 요청_객체에_시스템과_유저_프롬프트를_추가하여_전송() {
         //given
-        String input = "JSON 변환 테스트";
+        String systemPrompt = "너는 TDD 튜터야";
+        String userPrompt = "주제: collection";
 
         //when
-        String result = builder.createJSONBody(input);
+        String result = builder.createJSONBody(systemPrompt, userPrompt);
 
         //then
-        assertThat(result).contains("\"model\":\"a.x-4.0-light\"");
+        assertThat(result).contains("\"role\":\"system\"");
+        assertThat(result).contains("\"content\":\"너는 TDD 튜터야\"");
         assertThat(result).contains("\"role\":\"user\"");
-        assertThat(result).contains("\"content\":\"JSON 변환 테스트\"");
-        assertThat(result).contains("\"temperature\":0.7");
+        assertThat(result).contains("\"content\":\"주제ㅣ collection\"");
     }
 }
