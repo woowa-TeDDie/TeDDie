@@ -2,6 +2,7 @@ package TeDDie.api;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,14 +24,20 @@ public class RequestBodyBuilderTest {
 
         //when
         ApiRequest request = builder.buildRequestObject(systemPrompt, userPrompt);
-        ApiMessage message = request.messages().get(0);
+        List<ApiMessage> messages = request.messages();
 
         //then
-        assertThat(request.model()).contains("a.x-4.0-light");
+        assertThat(request.model()).isEqualTo("a.x-4.0-light");
         assertThat(request.temperature()).isEqualTo(0.7);
         assertThat(request.max_tokens()).isEqualTo(2000);
-        assertThat(message.role()).isEqualTo("user");
-        assertThat(message.content()).isEqualTo(userPrompt);
+
+        ApiMessage systemMessage = messages.get(0);
+        assertThat(systemMessage.role()).isEqualTo("system");
+        assertThat(systemMessage.content()).isEqualTo(systemPrompt);
+
+        ApiMessage userMessage = messages.get(1);
+        assertThat(userMessage.role()).isEqualTo("user");
+        assertThat(userMessage.content()).isEqualTo(userPrompt);
     }
 
     @DisplayName("요청 객체에 시스템과 유저 프롬프트를 추가하여 전송")
@@ -47,6 +54,6 @@ public class RequestBodyBuilderTest {
         assertThat(result).contains("\"role\":\"system\"");
         assertThat(result).contains("\"content\":\"너는 TDD 튜터야\"");
         assertThat(result).contains("\"role\":\"user\"");
-        assertThat(result).contains("\"content\":\"주제ㅣ collection\"");
+        assertThat(result).contains("\"content\":\"주제: collection\"");
     }
 }
