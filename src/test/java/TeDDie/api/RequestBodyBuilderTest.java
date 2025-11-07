@@ -55,5 +55,6 @@ public class RequestBodyBuilderTest {
         assertThat(result).contains("\"content\":\"너는 TDD 튜터야\"");
         assertThat(result).contains("\"role\":\"user\"");
         assertThat(result).contains("\"content\":\"주제: collection\"");
+        assertThat(result).contains("\"stream\":false");
     }
 }
