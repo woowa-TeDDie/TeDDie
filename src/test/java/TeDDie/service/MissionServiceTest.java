@@ -46,7 +46,7 @@ public class MissionServiceTest {
         String result = "## 미션: 문자열 계산기";
 
         //when
-        when(mockRequestBody.createJSONBody(anyString()))
+        when(mockRequestBody.createJSONBody(anyString(), anyString()))
                 .thenReturn("{\"promt\":\"...\"}");
         when(mockSender.post(anyString(), anyString()))
                 .thenReturn(testResponse);
@@ -57,13 +57,13 @@ public class MissionServiceTest {
         assertThat(actualText).isEqualTo(result);
     }
 
-    @DisplayName("미션 생성 호출 시 올바른 프롬프트를 생성하여 전달")
+    @DisplayName("미션 생성 호출 시 system/user 프롬프트를 분리하여 전달")
     @Test
     void 미션_생성_호출_시_올바른_프롬프트를_생성하여_전달() throws Exception {
         //given
         String topic = "collection";
         String difficulty = "easy";
-        when(mockRequestBody.createJSONBody(anyString()))
+        when(mockRequestBody.createJSONBody(anyString(), anyString()))
                 .thenReturn("{\"promt\":\"...\"}");
 
         String testResponse = """
@@ -73,17 +73,23 @@ public class MissionServiceTest {
         when(mockSender.post(anyString(), anyString()))
                 .thenReturn(testResponse);
 
-        ArgumentCaptor<String> promptCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> systemPromptCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> userPromptCaptor = ArgumentCaptor.forClass(String.class);
 
         //when
         missionService.generateMission(topic, difficulty);
-        String actualPrompt = promptCaptor.getValue();
 
         //then
-        verify(mockRequestBody).createJSONBody(promptCaptor.capture());
-        assertThat(actualPrompt).contains("TDD 연습");
-        assertThat(actualPrompt).contains("Java");
-        assertThat(actualPrompt).contains("주제: collection");
-        assertThat(actualPrompt).contains("난이도: easy");
+        verify(mockRequestBody).createJSONBody(
+                systemPromptCaptor.capture(),
+                userPromptCaptor.capture()
+        );
+        String actualSystemPrompt = systemPromptCaptor.getValue();
+        String actualUserPrompt = userPromptCaptor.getValue();
+        assertThat(actualSystemPrompt).contains("TDD 연습");
+        assertThat(actualSystemPrompt).contains("AI 튜터");
+        assertThat(actualUserPrompt).contains("주제: collection");
+        assertThat(actualUserPrompt).contains("난이도: easy");
+        assertThat(actualUserPrompt).doesNotContain("TDD 연습");
     }
 }
