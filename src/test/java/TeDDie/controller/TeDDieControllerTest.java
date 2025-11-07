@@ -39,4 +39,20 @@ public class TeDDieControllerTest {
         verify(mockService).generateMission("collection", "easy");
         verify(mockView).printMission(missionResult);
     }
+
+    @DisplayName("Service에서 예외 발생 시 View의 printError를 호출")
+    @Test
+    void Service에서_예외_발생_시_View의_printError를_호출() throws Exception {
+        //given
+        String[] args = {"--topic", "collection", "--difficulty", "easy"};
+        String errorMessage = "[ERROR] API 요청 실패";
+        when(mockService.generateMission("collection", "easy"))
+                .thenThrow(new RuntimeException(errorMessage));
+
+        //when
+        controller.run(args);
+
+        //then
+        verify(mockView).printError(errorMessage);
+    }
 }
