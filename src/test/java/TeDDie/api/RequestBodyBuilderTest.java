@@ -29,7 +29,7 @@ public class RequestBodyBuilderTest {
         //then
         assertThat(request.model()).isEqualTo("a.x-4.0-light");
         assertThat(request.temperature()).isEqualTo(0.7);
-        assertThat(request.max_tokens()).isEqualTo(2000);
+        assertThat(request.max_tokens()).isEqualTo(-1);
 
         ApiMessage systemMessage = messages.get(0);
         assertThat(systemMessage.role()).isEqualTo("system");

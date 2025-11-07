@@ -8,7 +8,8 @@ public class RequestBodyBuilder {
     private static final String SYSTEM_ROLE = "system";
     private static final String USER_ROLE = "user";
     private static final double DEFAULT_TEMPERATURE = 0.7;
-    private static final int DEFAULT_MAX_TOKENS = 2000;
+    private static final int DEFAULT_MAX_TOKENS = -1;
+    private static final boolean DEFAULT_STREAM = false;
 
     private final Gson gson;
 
@@ -23,7 +24,8 @@ public class RequestBodyBuilder {
                 DEFAULT_MODEL,
                 List.of(systemMessage, userMessage),
                 DEFAULT_TEMPERATURE,
-                DEFAULT_MAX_TOKENS
+                DEFAULT_MAX_TOKENS,
+                DEFAULT_STREAM
         );
     }
 
