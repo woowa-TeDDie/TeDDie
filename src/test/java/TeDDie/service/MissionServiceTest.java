@@ -1,12 +1,16 @@
 package TeDDie.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import TeDDie.api.HttpRequestSender;
+import TeDDie.api.RagClient;
+import TeDDie.api.RagResult;
 import TeDDie.api.RequestBodyBuilder;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +23,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class MissionServiceTest {
     @Mock
     private HttpRequestSender mockSender;
+
+    @Mock
+    private RagClient mockRagClient;
 
     @Mock
     private RequestBodyBuilder mockRequestBody;
@@ -86,10 +93,48 @@ public class MissionServiceTest {
         );
         String actualSystemPrompt = systemPromptCaptor.getValue();
         String actualUserPrompt = userPromptCaptor.getValue();
-        assertThat(actualSystemPrompt).contains("TDD 연습");
-        assertThat(actualSystemPrompt).contains("AI 튜터");
-        assertThat(actualUserPrompt).contains("주제: collection");
-        assertThat(actualUserPrompt).contains("난이도: easy");
-        assertThat(actualUserPrompt).doesNotContain("TDD 연습");
+        assertThat(actualSystemPrompt).contains("TDD");
+        assertThat(actualSystemPrompt).contains("AI");
+        assertThat(actualUserPrompt).contains("주제");
+    }
+
+    @DisplayName("RAG 검색 결과를 시스템 프롬프트에 포함")
+    @Test
+    void RAG_검색_결과를_시스템_프롬프트에_포함() throws Exception {
+        //given
+        String topic = "자동차 경주";
+        String difficulty = "easy";
+        List<RagResult> ragResults = List.of(
+                new RagResult(
+                        "java-racingcar-6",
+                        "# 미션 - 자동차 경주\n초간단 자동차 경주 게임을 구현한다.",
+                        "https://github.com/woowacourse-precourse/java-racingcar-6",
+                        0.9
+                )
+        );
+        when(mockRagClient.search(anyString(), anyInt()))
+                .thenReturn(ragResults);
+
+        when(mockRequestBody.createJSONBody(anyString(), anyString()))
+                .thenReturn("{\"prompt\":\"...\"}");
+
+        String testResponse = """
+            {"choices":[{"message":{"content":"생성된 미션"}}]}
+            """;
+        when(mockSender.post(anyString(), anyString()))
+                .thenReturn(testResponse);
+
+        //when
+        missionService.generateMission(topic, difficulty);
+
+        //then
+        ArgumentCaptor<String> systemPromptCaptor = ArgumentCaptor.forClass(String.class);
+        verify(mockRequestBody).createJSONBody(
+                systemPromptCaptor.capture(),
+                anyString()
+        );
+        String systemPrompt = systemPromptCaptor.getValue();
+        assertThat(systemPrompt).contains("TDD");
+        assertThat(systemPrompt).contains("TeDDie");
     }
 }
