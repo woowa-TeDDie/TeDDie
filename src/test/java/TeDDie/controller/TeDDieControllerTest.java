@@ -2,9 +2,12 @@ package TeDDie.controller;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
 
+import TeDDie.generator.ProjectGenerator;
 import TeDDie.service.MissionService;
 import TeDDie.view.OutputView;
+import java.nio.file.Path;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +22,9 @@ public class TeDDieControllerTest {
 
     @Mock
     private OutputView mockView;
+
+    @Mock
+    private ProjectGenerator mockProjectGenerator;
 
     @InjectMocks
     private TeDDieController controller;
@@ -54,5 +60,26 @@ public class TeDDieControllerTest {
 
         //then
         verify(mockView).printError(errorMessage);
+    }
+
+    @DisplayName("미션 생성 후 바탕화면에 프로젝트 생성")
+    @Test
+    void 미션_생성_후_바탕화면에_프로젝트_생성() throws Exception {
+        //given
+        String[] args = {"--topic", "collection", "--difficulty", "easy"};
+        String missionResult = "## 미션";
+        when(mockService.generateMission("collection", "easy"))
+                .thenReturn(missionResult);
+
+        //when
+        controller.run(args);
+
+        //then
+        verify(mockProjectGenerator).createProject(
+                any(Path.class),
+                eq("java-collection"),
+                eq("collection"),
+                eq(missionResult)
+        );
     }
 }
