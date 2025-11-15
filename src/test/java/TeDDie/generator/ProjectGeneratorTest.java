@@ -2,6 +2,7 @@ package TeDDie.generator;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,5 +36,22 @@ public class ProjectGeneratorTest {
         assertThat(Files.exists(projectPath.resolve("settings.gradle"))).isTrue();
         assertThat(Files.exists(projectPath.resolve("src/main/java"))).isTrue();
         assertThat(Files.exists(projectPath.resolve("src/test/java"))).isTrue();
+    }
+
+    @DisplayName("setting.gradle의 프로젝트명을 미션명으로 변경")
+    @Test
+    void setting_gradle의_프로젝트명을_미션명으로_변경() throws IOException {
+        //given
+        String projectName = "java-lotto";
+
+        //when
+        Path projectPath = generator.createProject(tempDir, projectName);
+
+        //then
+        Path settingsGradle = projectPath.resolve("settings.gradle");
+        String content = Files.readString(settingsGradle);
+
+        assertThat(content).contains("rootProject.name = 'java-lotto'");
+        assertThat(content).doesNotContain("{{PROJECT_NAME}}");
     }
 }
