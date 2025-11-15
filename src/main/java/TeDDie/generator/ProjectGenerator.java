@@ -16,6 +16,7 @@ public class ProjectGenerator {
             copyTemplate(projectPath);
             replaceProjectName(projectPath, projectName);
             moveFilesToPackage(projectPath, packageName);
+            replacePackageState(projectPath, packageName);
         } catch (IOException e) {
             throw new RuntimeException("[ERROR] 프로젝트 생성 실패: " + e.getMessage(), e);
         }
@@ -83,5 +84,18 @@ public class ProjectGenerator {
         Path fileName = source.getFileName();
         Path destination = targetPath.resolve(fileName);
         Files.move(source, destination);
+    }
+
+    private void replacePackageState(Path projectPath, String packageName) throws IOException {
+        replacePackageName(projectPath, "src/main/java/" + packageName + "/Application.java", packageName);
+        replacePackageName(projectPath, "src/test/java/" + packageName + "/ApplicationTest.java", packageName);
+    }
+
+    private void replacePackageName(Path projectPath, String filePath, String packageName) throws IOException {
+        Path targetPath = projectPath.resolve(filePath);
+        String content = Files.readString(targetPath);
+        String packageStatement = "package " + packageName + ";\n\n";  // \n\n 추가!
+        String newContent = packageStatement + content;
+        Files.writeString(targetPath, newContent);
     }
 }
