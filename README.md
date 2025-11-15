@@ -16,19 +16,19 @@
 - [X] 과제 생성 로직
   - [X] 기능 요구사항 생성
   - [X] 프로그래밍 요구사항 생성
-  - [ ] 입출력 예시 생성
+  - [X] 입출력 예시 생성
   
-- [ ] 프로젝트 템플릿 생성
-  - [ ] 기본 폴더 구조를 자동 생성한다.
+- [X] 프로젝트 템플릿 생성
+  - [X] 기본 폴더 구조를 자동 생성한다.
   
 - [ ] 테스트 스켈레톤 생성 
   - [ ] JUnit 5 기반 테스트 파일의 기본 틀을 자동으로 생성.
   - [ ] @DisplayName, @Test 주석을 포함한 최소 2~3개의 테스트 케이스를 생성한다.
 
-- [ ] CLI 인터페이스 제작
+- [X] CLI 인터페이스 제작
 
-- [ ] Markdown 출력 (README.md 자동 생성)
-  - [ ] 생성된 문제는 Markdown 문서(README.md)로 저장된다.
+- [X] Markdown 출력 (README.md 자동 생성)
+  - [X] 생성된 문제는 Markdown 문서(README.md)로 저장된다.
     ```
     출력 형식은 다음과 같다:
     
@@ -57,30 +57,24 @@
 | ------ | -------------- | ------------------------------------------ | ------------------------------ | ----- |
 | 명령어 실행 | `--topic`      | 생성할 문제의 주제                                 | `collection`, `string`, `loop` | ✅     |
 |        | `--difficulty` | 난이도 선택 (`easy`, `medium`, `hard`)          | `medium`                       | ✅     |
-|        | `--goal`       | 학습 목표 또는 TDD 연습 목적                         | `"단일 책임 원칙 연습"`                | ❌     |
-|        | `--count`      | 생성할 문제 개수 (기본 1개)                          | `3`                            | ❌     |
-| 환경 설정  | `--api`        | 사용할 AI 엔진 선택 (`openai`, `claude`, `local`) | `local`                        | ❌     |
-|        | `--output`     | 결과물을 저장할 디렉토리 경로                           | `./output/`                    | ❌     |
 
 #### 입력 방식 예시:
 ```
-./gradlew run --args="--topic collection --difficulty medium --goal 'SRP 연습'"
+./gradlew run --args="--topic collection --difficulty medium"
 ```
 ---
 
 ### 출력
 
 ### (1) CLI 출력
-| 항목 | 내용                                                   |
-|------|------------------------------------------------------|
-| 성공 메시지 | `🧸 TeDDie: 문제 생성 완료!`                               |
-| 출력 경로 안내 | `/output/{topic}-{difficulty}-{timestamp}/README.md` |
-| 테스트 템플릿 안내 | `/output/.../ApplicationTest.java`                   |
+| 항목 | 내용                                                    |
+|------|-------------------------------------------------------|
+| 성공 메시지 | `🧸 TeDDie: 문제 생성 완료!`                                |
+| 테스트 템플릿 안내 | `/Desktop/.../ApplicationTest.java`                   |
 
 **예시:**
 ```bash
 🧸 TeDDie: 문제 생성 완료!
-📂 출력 위치: /output/collection-medium-20251106/
 
 (2) 파일 출력 (Markdown)
 

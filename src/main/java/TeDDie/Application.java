@@ -4,6 +4,7 @@ import TeDDie.api.HttpRequestSender;
 import TeDDie.api.RagClient;
 import TeDDie.api.RequestBodyBuilder;
 import TeDDie.controller.TeDDieController;
+import TeDDie.generator.ProjectGenerator;
 import TeDDie.service.MissionService;
 import TeDDie.view.ConsoleView;
 import TeDDie.view.OutputView;
@@ -15,7 +16,9 @@ public class Application {
         RagClient ragClient = new RagClient(httpRequestSender);
         MissionService missionService = new MissionService(httpRequestSender, bodyBuilder, ragClient);
         OutputView view = new ConsoleView();
-        TeDDieController controller = new TeDDieController(missionService, view);
+        ProjectGenerator projectGenerator = new ProjectGenerator();
+
+        TeDDieController controller = new TeDDieController(missionService, view, projectGenerator);
         controller.run(args);
     }
 }

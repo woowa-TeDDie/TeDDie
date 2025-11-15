@@ -1,17 +1,22 @@
 package TeDDie.controller;
 
+import TeDDie.generator.ProjectGenerator;
 import TeDDie.service.MissionService;
 import TeDDie.view.OutputView;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TeDDieController {
     private final MissionService missionService;
     private final OutputView outputView;
+    private final ProjectGenerator projectGenerator;
 
-    public TeDDieController(MissionService missionService, OutputView outputView) {
+    public TeDDieController(MissionService missionService, OutputView outputView, ProjectGenerator projectGenerator) {
         this.missionService = missionService;
         this.outputView = outputView;
+        this.projectGenerator = projectGenerator;
     }
 
     public void run(String args[]) {
@@ -21,6 +26,10 @@ public class TeDDieController {
             String difficulty = argMap.get("--difficulty");
 
             String missionResult = missionService.generateMission(topic, difficulty);
+
+            Path desktopPath = getDesktopPath();
+            String projectName = "java-" + topic;
+            projectGenerator.createProject(desktopPath, projectName, topic, missionResult);
 
             outputView.printMission(missionResult);
         } catch (Exception e) {
@@ -37,5 +46,10 @@ public class TeDDieController {
             }
         }
         return map;
+    }
+
+    private Path getDesktopPath() {
+        String userHome = System.getProperty("user.home");
+        return Path.of(userHome, "Desktop");
     }
 }
