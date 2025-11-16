@@ -16,24 +16,23 @@ public class MissionService {
     private final HttpRequestSender sender;
     private final RequestBodyBuilder builder;
     private final RagClient ragClient;
-    private final Gson gson;
 
     public MissionService(HttpRequestSender sender, RequestBodyBuilder builder, RagClient ragClient) {
         this.sender = sender;
         this.builder = builder;
         this.ragClient = ragClient;
-        this.gson = new Gson();
     }
 
     public String generateMission(Topic topic, Difficulty difficulty) throws Exception {
         List<RagResult> ragResults = ragClient.search(topic.getValue(), 3);
-        UserPrompt userPrompt = new UserPrompt(topic, difficulty);
+        UserPrompt userPrompt = new UserPrompt(topic, difficulty, ragResults);
         String requestJson = builder.createJSONBody(SYSTEM_PROMPT, userPrompt.getContent());
         String responseJson = sender.post("http://localhost:1234/v1/chat/completions", requestJson);
         return parseContentFromResponse(responseJson);
     }
 
     public String parseContentFromResponse(String responseJson) {
+        Gson gson = new Gson();
         ApiResponse response = gson.fromJson(responseJson, ApiResponse.class);
         return response.extractResponse();
     }

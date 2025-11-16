@@ -1,7 +1,9 @@
 package TeDDie.prompt;
 
+import TeDDie.api.RagResult;
 import TeDDie.domain.Difficulty;
 import TeDDie.domain.Topic;
+import java.util.List;
 
 public class UserPrompt {
     private static final String TEMPLATE = """
@@ -11,11 +13,12 @@ public class UserPrompt {
 
     private final String content;
 
-    public UserPrompt(Topic topic, Difficulty difficulty) {
+    public UserPrompt(Topic topic, Difficulty difficulty, List<RagResult> ragResult) {
         this.content = String.format(
                 TEMPLATE,
                 topic.getValue(),
-                difficulty.getValue()
+                difficulty.getValue(),
+                ragResult
         );
     }
 

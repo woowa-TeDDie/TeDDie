@@ -31,7 +31,7 @@ public class TeDDieController {
             String missionResult = missionService.generateMission(topic, difficulty);
 
             Path desktopPath = getDesktopPath();
-            String projectName = "java-" + topic;
+            String projectName = "java-" + topic.getValue();
             projectGenerator.createProject(desktopPath, projectName, topic.getValue(), missionResult);
 
             outputView.printMission(missionResult);
