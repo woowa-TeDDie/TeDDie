@@ -29,4 +29,8 @@ public enum Difficulty {
             throw new IllegalArgumentException("[ERROR] 난이도는 빈 문자열일 수 없습니다.");
         }
     }
+
+    public String getValue() {
+        return value;
+    }
 }
