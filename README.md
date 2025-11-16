@@ -22,7 +22,7 @@
 - [X] CLI를 통한 사용자 입력 처리 (`--topic`, `--difficulty`)
 - [X] 로컬 LLM API 호출 (LM Studio)
 - [X] RAG API 연동 (우테코 과제 검색)
-- [ ] 프로젝트 템플릿 자동 생성 (진행 중)
+- [X] 프로젝트 템플릿 자동 생성
 - [ ] 테스트 스켈레톤 생성 (계획 중)
 
 ---
@@ -143,12 +143,12 @@ void API_응답을_파싱하여_실제_텍스트_반환() {
 ### 🔨 리팩토링 중
 
 **우선순위 1: 디미터의 법칙 준수**
-- [ ] ApiResponse에 extractContent() 메서드 추가
-- [ ] 체이닝 호출 제거
+- [X] ApiResponse에 extractContent() 메서드 추가
+- [X] 체이닝 호출 제거
 
 **우선순위 2: 원시값 포장**
-- [ ] Topic 값 객체 생성
-- [ ] Difficulty Enum 생성
+- [X] Topic 값 객체 생성
+- [X] Difficulty Enum 생성
 - [ ] Prompt 값 객체 생성
 
 **우선순위 3: 일급 컬렉션**
