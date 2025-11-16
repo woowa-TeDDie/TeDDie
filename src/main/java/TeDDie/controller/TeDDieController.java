@@ -41,16 +41,6 @@ public class TeDDieController {
 
     }
 
-    private Map<String, String> parseArgs(String[] args) {
-        Map<String, String> map = new HashMap<>();
-        for (int i = 0; i < args.length; i += 2) {
-            if(i + 1 < args.length) {
-                map.put(args[i], args[i + 1]);
-            }
-        }
-        return map;
-    }
-
     private Path getDesktopPath() {
         String userHome = System.getProperty("user.home");
         return Path.of(userHome, "Desktop");
