@@ -1,10 +1,12 @@
-# 🧸 teddie - Java Application
+# 🧸 TeDDie
 
 > **우테코 프리코스 스타일 TDD 연습 문제 생성기**
 
 ---
 
 ## 🤔 왜 이 프로젝트를 만들었나요?
+
+---
 
 우아한테크코스 프리코스를 진행하면서 TDD의 가치를 체감했습니다.  
 하지만 우테코 스타일의 연습 문제가 더 필요했고, "그럼 AI로 만들어보자!"라고 생각했습니다.
@@ -18,6 +20,8 @@
 
 ## 📋 프로젝트 개요
 
+---
+
 ### 주요 역할
 - [X] CLI를 통한 사용자 입력 처리 (`--topic`, `--difficulty`)
 - [X] 로컬 LLM API 호출 (LM Studio)
@@ -28,6 +32,8 @@
 ---
 
 ## 📁 프로젝트 구조
+
+---
 
 ```
 src/main/java/teddie/
@@ -67,43 +73,47 @@ src/main/java/teddie/
 
 ## 🎯 상세 기능 구현 목록
 
-### 🔧 api/ - API 통신 계층
+---
+
+### api/ - API 통신 계층
 - [X] **HttpRequestSender**: HTTP/1.1 POST 요청 전송
 - [X] **RequestBodyBuilder**: LLM API 요청 JSON 생성
 - [X] **RagClient**: RAG API 호출 및 결과 수신
 - [X] **ApiRequest/ApiMessage/RagResult**: 요청/응답 데이터 구조 (Record)
 
-### 🎮 controller/ - 흐름 제어 계층
+### controller/ - 흐름 제어 계층
 - [X] **TeDDieController**: CLI 인자 파싱 및 전체 흐름 제어
 - [X] **ProjectGeneratorController**: 프로젝트 생성 흐름 관리
 
-### 📦 domain/ - 도메인 객체 계층
+### domain/ - 도메인 객체 계층
 - [X] **CommandLineArgs**: CLI 인자 파싱 및 검증
 - [X] **Topic**: 문제 주제 원시값 포장
 - [X] **Difficulty**: 난이도 원시값 포장
 
-### 🏭 generator/ - 프로젝트 생성 계층
+### generator/ - 프로젝트 생성 계층
 - [X] **TemplateCopier**: 템플릿 디렉토리 복사
 - [X] **ProjectWriter**: 생성된 프로젝트 구조화
 - [X] **ReadmeWriter**: README.md 파일 생성
 - [X] **FileReplacer**: 파일 내용 치환
 - [X] **PackageStructureBuilder**: 패키지 구조 생성
 
-### 💬 prompt/ - 프롬프트 관리 계층
+### prompt/ - 프롬프트 관리 계층
 - [X] **SystemPrompt**: LLM 시스템 프롬프트 관리
 - [X] **UserPrompt**: RAG 결과 기반 사용자 프롬프트 생성
 
-### ⚙️ service/ - 비즈니스 로직 계층
+###  service/ - 비즈니스 로직 계층
 - [X] **MissionService**: 미션 생성 핵심 로직
 - [X] **ApiResponse**: LLM 응답 파싱
 
-### 🖥️ view/ - 출력 계층
+###  view/ - 출력 계층
 - [X] **ConsoleView**: 콘솔 출력 담당
 - [X] **OutputView**: 출력 포맷팅
 
 ---
 
 ## 🏗 시스템 아키텍처
+
+---
 
 ### 하이브리드 구조를 선택한 이유
 
@@ -219,58 +229,27 @@ void API_응답을_파싱하여_실제_텍스트_반환() {
 
 ---
 
-## 🚧 현재 진행 상황
-
-### ✅ 완료
-
-- [X] LLM API 통신 (HttpRequestSender)
-- [X] JSON 요청/응답 처리 (Gson, RequestBodyBuilder)
-- [X] RAG API 연동 (RagClient)
-- [X] 미션 생성 로직 (MissionService)
-- [X] CLI 인터페이스 (TeDDieController)
-- [X] 콘솔 출력 (ConsoleView)
-- [X] 모든 핵심 로직 단위 테스트 작성
-- [X] MockWebServer를 활용한 통합 테스트
-- [X] 프로젝트 템플릿 자동 생성
-- [X] Markdown 파일 저장
-- [X] 테스트 스켈레톤 생성
-
----
-
-## ✅ 코딩 컨벤션 체크리스트
-
-### 현재 상태
-
-- [X] 한 메서드에 오직 한 단계의 들여쓰기만
-- [X] else 예약어 사용하지 않기
-- [X] 모든 원시값과 문자열 포장
-- [X] 콜렉션에 대해 일급 컬렉션 적용
-- [X] 3개 이상의 인스턴스 변수를 가진 클래스 없음
-- [X] getter/setter 없이 구현
-- [X] 메서드의 인자 수를 제한 (3개 이하)
-- [X] 코드 한 줄에 점(.) 하나만 
-- [X] 메서드가 한 가지 일만 담당
-- [X] 클래스를 작게 유지
-
----
-
 ## ⚠️ 예외 처리
+
+---
 
 | 분류 | 예외 상황 | 예시 입력 | 에러 메시지 | 발생 위치 |
 |------|----------|----------|------------|----------|
 | **CLI 인자** | 필수 인자 누락 | `--topic collection` (difficulty 없음) | `[ERROR] 필수 옵션을 입력해야 합니다.` | `TeDDieController` |
-| | topic 공백 | `--topic "" --difficulty easy` | `[ERROR] 주제는 비어있을 수 없습니다.` | `Topic` (예정) |
-| | 잘못된 난이도 | `--difficulty invalid` | `[ERROR] 유효하지 않은 난이도입니다.` | `Difficulty` (예정) |
+| | topic 공백 | `--topic "" --difficulty easy` | `[ERROR] 주제는 빈 값일 수 없습니다.` | `Topic` |
+| | difficulty 공백 | `--topic collection --difficulty ""` | `[ERROR] 난이도는 빈 문자열일 수 없습니다.` | `Difficulty` |
+| | 잘못된 난이도 | `--difficulty invalid` | `[ERROR] 유효하지 않은 난이도입니다.` | `Difficulty` |
 | **API 통신** | LLM 서버 미응답 | (서버 중지 상태) | `ConnectException` | `HttpRequestSender` |
 | | HTTP 에러 | (500 서버 에러) | `[ERROR] HTTP Error Status: 500` | `HttpRequestSender` |
 | | RAG API 미응답 | (RAG 서버 중지) | `ConnectException` | `RagClient` |
-| **응답 파싱** | choices 없음 | `{"choices": []}` | `[ERROR] API 응답에 choices가 없습니다.` | `ApiResponse` (예정) |
-| | message null | `{"choices": [{"message": null}]}` | `[ERROR] API 응답에 message가 없습니다.` | `Choice` (예정) |
-| | content 빈 문자열 | `{"choices": [{"message": {"content": ""}}]}` | `[ERROR] API 응답에 content가 없습니다.` | `Message` (예정) |
+| **응답 파싱** | choices 없음 | `{"choices": []}` | `[ERROR] API 응답에 choice가 없습니다.` | `ApiResponse` |
+| | message null | `{"choices": [{"message": }]}` | `[ERROR] API 응답에 message가 없습니다.` | `Choice` |
 
 ---
 
-## 🧪 테스트 전략
+## 테스트 전략
+
+---
 
 ### TDD 사이클
 
@@ -338,7 +317,26 @@ void CLI_인자를_파싱하여_Service와_View를_올바르게_호출() {
 
 ---
 
+## 코딩 컨벤션 체크리스트
+
+---
+
+- [X] 한 메서드에 오직 한 단계의 들여쓰기만
+- [X] else 예약어 사용하지 않기
+- [X] 모든 원시값과 문자열 포장
+- [X] 콜렉션에 대해 일급 컬렉션 적용
+- [X] 3개 이상의 인스턴스 변수를 가진 클래스 없음
+- [X] getter/setter 없이 구현
+- [X] 메서드의 인자 수를 제한 (3개 이하)
+- [X] 코드 한 줄에 점(.) 하나만
+- [X] 메서드가 한 가지 일만 담당
+- [X] 클래스를 작게 유지
+
+---
+
 ## 🚀 빌드 및 실행
+
+---
 
 ### 1. 의존성 설치
 
@@ -369,11 +367,6 @@ void CLI_인자를_파싱하여_Service와_View를_올바르게_호출() {
 
 ## 👨‍💻 개발자
 
-정용태 ([@jyt6640](https://github.com/jyt6640))
-
 ---
 
-## 🔗 관련 리포지토리
-
-- **teddie-RagSystem**: Python RAG 라이브러리
-- **teddie-RagAPI**: FastAPI 검색 서버
+정용태 ([@jyt6640](https://github.com/jyt6640))
