@@ -7,7 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import teddie.util.HttpRequestSender;
+import teddie.common.util.HttpRequestSender;
 import teddie.api.RagClient;
 import teddie.api.dto.RagResult;
 import teddie.domain.Difficulty;

@@ -2,7 +2,7 @@ package teddie.service;
 
 import static teddie.prompt.SystemPrompt.SYSTEM_PROMPT;
 
-import teddie.util.HttpRequestSender;
+import teddie.common.util.HttpRequestSender;
 import teddie.api.RagClient;
 import teddie.api.dto.RagResult;
 import teddie.domain.Difficulty;

@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teddie.api.dto.RagResult;
-import teddie.util.HttpRequestSender;
+import teddie.common.util.HttpRequestSender;
 
 public class RagClientTest {
     @DisplayName("RagClient 생성")

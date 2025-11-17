@@ -15,10 +15,10 @@ public class ProjectGeneratorController {
     private final PackageStructureBuilder packageBuilder;
     private final ProjectWriter projectWriter;
 
-    public ProjectGeneratorController() {
-        this.templateCopier = new TemplateCopier();
-        this.packageBuilder = new PackageStructureBuilder();
-        this.projectWriter = new ProjectWriter();
+    public ProjectGeneratorController(TemplateCopier templateCopier, PackageStructureBuilder packageBuilder, ProjectWriter projectWriter) {
+        this.templateCopier = templateCopier;
+        this.packageBuilder = packageBuilder;
+        this.projectWriter = projectWriter;
     }
 
     public Path createProject(String projectName, String packageName, String readmeContent) {

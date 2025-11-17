@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 import teddie.api.dto.RagResult;
-import teddie.util.HttpRequestSender;
+import teddie.common.util.HttpRequestSender;
 
 public class RagClient {
     private static final String RAG_API_URL = "http://localhost:8000/api/search";
