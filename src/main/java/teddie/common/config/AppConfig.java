@@ -2,7 +2,7 @@ package teddie.common.config;
 
 import teddie.controller.ProjectGeneratorController;
 import teddie.controller.TeDDieController;
-import teddie.generator.FileReplacer;
+import teddie.generator.PackageStatementReplacer;
 import teddie.generator.PackageStructureBuilder;
 import teddie.generator.ProjectWriter;
 import teddie.generator.ReadmeWriter;
@@ -35,8 +35,8 @@ public class AppConfig {
         return new MissionService(httpRequestSender(), requestBodyBuilder(), ragClient());
     }
 
-    public FileReplacer fileReplacer() {
-        return new FileReplacer();
+    public PackageStatementReplacer fileReplacer() {
+        return new PackageStatementReplacer();
     }
 
     public ReadmeWriter readmeWriter() {

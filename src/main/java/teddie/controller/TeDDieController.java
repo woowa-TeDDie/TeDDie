@@ -5,7 +5,6 @@ import teddie.domain.Difficulty;
 import teddie.domain.Topic;
 import teddie.service.MissionService;
 import teddie.view.OutputView;
-import java.nio.file.Path;
 
 public class TeDDieController {
     private static final String PROJECT_PREFIX = "java";

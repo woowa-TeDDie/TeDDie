@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class FileReplacer {
-    private static final String SETTINGS_GRADLE = "settings.gradle";
-    private static final String REPLACE_TARGET = "{{PROJECT_NAME}}";
+public class PackageStatementReplacer {
     private static final String APPLICATION = "/Application.java";
     private static final String APPLICATION_TEST = "/ApplicationTest.java";
     private static final String MAIN_PACKAGE = "src/main/java";
@@ -14,13 +12,6 @@ public class FileReplacer {
     private static final String PACKAGE_SEPERATOR = "/";
     private static final String PACKAGE_STATEMENT = "package ";
     private static final String PACKAGE_SUFFIX = ";\n\n";
-
-    public void replaceProjectName(Path projectPath, String projectName) throws IOException {
-        Path settingGradle = projectPath.resolve(SETTINGS_GRADLE);
-        String content = Files.readString(settingGradle);
-        String replaced = content.replace(REPLACE_TARGET, projectName);
-        Files.writeString(settingGradle, replaced);
-    }
 
     public void replacePackageState(Path projectPath, String packageName) throws IOException {
         replacePackageName(projectPath, MAIN_PACKAGE + PACKAGE_SEPERATOR + packageName + APPLICATION, packageName);
