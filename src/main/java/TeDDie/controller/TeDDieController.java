@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TeDDieController {
+    private static final String PROJECT_PREFIX = "java";
+    private static final String USER_HOME_PROPERTY = "user.home";
+    private static final String USER_DESKTOP = "Desktop";
+
     private final MissionService missionService;
     private final OutputView outputView;
     private final ProjectGenerator projectGenerator;
@@ -24,16 +28,8 @@ public class TeDDieController {
 
     public void run(String args[]) {
         try {
-            CommandLineArgs commandLineArgs = new CommandLineArgs(args);
-            Topic topic = new Topic(commandLineArgs.getTopic());
-            Difficulty difficulty = Difficulty.from(commandLineArgs.getDifficulty());
-
-            String missionResult = missionService.generateMission(topic, difficulty);
-
-            Path desktopPath = getDesktopPath();
-            String projectName = "java-" + topic.getValue();
-            projectGenerator.createProject(desktopPath, projectName, topic.getValue(), missionResult);
-
+            String missionResult = generateMission(args);
+            generateProject(args);
             outputView.printMission(missionResult);
         } catch (Exception e) {
             outputView.printError(e.getMessage());
@@ -41,8 +37,24 @@ public class TeDDieController {
 
     }
 
+    private String generateMission(String[] args) throws Exception {
+        CommandLineArgs commandLineArgs = new CommandLineArgs(args);
+        Topic topic = new Topic(commandLineArgs.getTopic());
+        Difficulty difficulty = Difficulty.from(commandLineArgs.getDifficulty());
+        return missionService.generateMission(topic, difficulty);
+    }
+
+    private void generateProject(String[] args) {
+        CommandLineArgs commandLineArgs = new CommandLineArgs(args);
+        Topic topic = new Topic(commandLineArgs.getTopic());
+
+        Path desktopPath = getDesktopPath();
+        String projectName = PROJECT_PREFIX + topic.getValue();
+        projectGenerator.createProject(desktopPath, projectName, topic.getValue(), projectName);
+    }
+
     private Path getDesktopPath() {
-        String userHome = System.getProperty("user.home");
-        return Path.of(userHome, "Desktop");
+        String userHome = System.getProperty(USER_HOME_PROPERTY);
+        return Path.of(userHome, USER_DESKTOP);
     }
 }
