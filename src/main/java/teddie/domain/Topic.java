@@ -10,7 +10,7 @@ public class Topic {
 
     private void validateEmptyInput(String value) {
         if(value == null || value.isBlank()) {
-            throw new IllegalArgumentException("[ERROR] 주제는 빈 값일 수 없습니다.");
+            throw new IllegalArgumentException("주제는 빈 값일 수 없습니다.");
         }
     }
 

@@ -37,7 +37,7 @@ public class MissionServiceTest {
 
     @DisplayName("API 응답을 파싱하여 실제 텍스트 반환")
     @Test
-    void API_응답을_파싱하여_실제_텍스트_반환() throws Exception {
+    void API_응답을_파싱하여_실제_텍스트_반환() {
         //given
         Topic topic = new Topic("collection");
         Difficulty difficulty = Difficulty.EASY;
@@ -68,7 +68,7 @@ public class MissionServiceTest {
 
     @DisplayName("미션 생성 호출 시 system user 프롬프트를 분리하여 전달")
     @Test
-    void 미션_생성_호출_시_올바른_프롬프트를_생성하여_전달() throws Exception {
+    void 미션_생성_호출_시_올바른_프롬프트를_생성하여_전달() {
         //given
         Topic topic = new Topic("collection");
         Difficulty difficulty = Difficulty.EASY;
@@ -102,7 +102,7 @@ public class MissionServiceTest {
 
     @DisplayName("RAG 검색 결과를 시스템 프롬프트에_포함")
     @Test
-    void RAG_검색_결과를_시스템_프롬프트에_포함() throws Exception {
+    void RAG_검색_결과를_시스템_프롬프트에_포함() {
         //given
         Topic topic = new Topic("자동차 경주");
         Difficulty difficulty = Difficulty.EASY;

@@ -32,7 +32,6 @@ public class ApiResponseTest {
         //when&then
         assertThatThrownBy(response::extractResponse)
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("[ERROR]")
                 .hasMessageContaining("choice");
     }
 
@@ -42,7 +41,6 @@ public class ApiResponseTest {
         //when&then
         assertThatThrownBy(() -> new Choice(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("[ERROR]")
                 .hasMessageContaining("message");
     }
 }

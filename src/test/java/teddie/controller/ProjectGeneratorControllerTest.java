@@ -34,7 +34,7 @@ public class ProjectGeneratorControllerTest {
 
     @DisplayName("프로젝트 생성 시 의존 객체들을 올바르게 호출한다")
     @Test
-    void createProject_should_call_dependencies_correctly() throws IOException {
+    void createProject_should_call_dependencies_correctly() {
         // given
         String projectName = "test-project";
         String packageName = "testpackage";

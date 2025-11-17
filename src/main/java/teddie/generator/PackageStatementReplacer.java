@@ -13,9 +13,13 @@ public class PackageStatementReplacer {
     private static final String PACKAGE_STATEMENT = "package ";
     private static final String PACKAGE_SUFFIX = ";\n\n";
 
-    public void replacePackageState(Path projectPath, String packageName) throws IOException {
-        replacePackageName(projectPath, MAIN_PACKAGE + PACKAGE_SEPERATOR + packageName + APPLICATION, packageName);
-        replacePackageName(projectPath, TEST_PACKAGE + PACKAGE_SEPERATOR + packageName + APPLICATION_TEST, packageName);
+    public void replacePackageState(Path projectPath, String packageName) {
+        try {
+            replacePackageName(projectPath, MAIN_PACKAGE + PACKAGE_SEPERATOR + packageName + APPLICATION, packageName);
+            replacePackageName(projectPath, TEST_PACKAGE + PACKAGE_SEPERATOR + packageName + APPLICATION_TEST, packageName);
+        } catch (IOException e) {
+            throw new RuntimeException("패키지 구문 변경 실패: " + e.getMessage(), e);
+        }
     }
 
     private void replacePackageName(Path projectPath, String filePath, String packageName) throws IOException {

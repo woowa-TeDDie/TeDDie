@@ -10,7 +10,7 @@ record ApiResponse(List<Choice> choices) {
 
     private void validateEmpty() {
         if (choices == null || choices.isEmpty()) {
-            throw new IllegalArgumentException("[ERROR] API 응답에 choice가 없습니다.");
+            throw new IllegalArgumentException("API 응답에 choice가 없습니다.");
         }
     }
 }

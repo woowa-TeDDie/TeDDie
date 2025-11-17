@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import teddie.common.util.HttpRequestSender;
+import teddie.exception.HttpRequestException;
 
 public class HttpRequestSenderTest {
     private MockWebServer mockWebServer;
@@ -33,7 +34,7 @@ public class HttpRequestSenderTest {
 
     @DisplayName("서버가 200 OK 응답시 응답 본문을 그대로 반환")
     @Test
-    void 서버가_200_OK_응답시_응답_본문을_그대로_반환() throws Exception {
+    void 서버가_200_OK_응답시_응답_본문을_그대로_반환() {
         //given
         String expectedBody = "{\"resqonse\":\"목 테스트 성공\"}";
         mockWebServer.enqueue(new MockResponse()
@@ -87,7 +88,7 @@ public class HttpRequestSenderTest {
         assertThat(request.getBody().readUtf8()).isEqualTo(input);
     }
 
-    @DisplayName("연결할 수 없는 주소로 요청시 ConnectException 던짐")
+    @DisplayName("연결할 수 없는 주소로 요청시 HttpRequestException 던짐")
     @Test
     void 연결할_수_없는_주소로_요청시_ConnectException을_던짐() {
         //given
@@ -96,6 +97,6 @@ public class HttpRequestSenderTest {
 
         //when&then
         assertThatThrownBy(() -> sender.post(url, input))
-                .isInstanceOf(ConnectException.class);
+                .isInstanceOf(HttpRequestException.class);
     }
 }

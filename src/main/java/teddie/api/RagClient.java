@@ -13,7 +13,7 @@ public class RagClient {
     private static final String QUERY = "query";
     private static final String TOP_K = "top_k";
     private static final String RESULTS = "results";
-    private static final String REPO =  "repo";
+    private static final String REPO = "repo";
     private static final String TEXT = "text";
     private static final String URL = "url";
     private static final String SIMILARITY_SCORE = "similarity_score";
@@ -26,7 +26,7 @@ public class RagClient {
         this.gson = new Gson();
     }
 
-    public List<RagResult> search(String query, int topK) throws Exception {
+    public List<RagResult> search(String query, int topK) {
         String requestBody = buildSearchRequest(query, topK);
         String responseJson = sender.post(RAG_API_URL, requestBody);
         return parseSearchResponse(responseJson);

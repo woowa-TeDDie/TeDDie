@@ -1,6 +1,5 @@
 package teddie.generator;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 public class ProjectWriter {
@@ -14,12 +13,12 @@ public class ProjectWriter {
         this.settingsGradleReplacer = settingsGradleReplacer;
     }
 
-    public void writeProject(Path projectPath, String projectName, String packageName) throws IOException {
+    public void writeProject(Path projectPath, String projectName, String packageName) {
         settingsGradleReplacer.replaceGradleProjectName(projectPath, projectName);
         packageStatementReplacer.replacePackageState(projectPath, packageName);
     }
 
-    public void writeREADME(Path projectPath, String missionContent) throws IOException {
+    public void writeREADME(Path projectPath, String missionContent) {
         readmeWriter.createReadme(projectPath, missionContent);
     }
 }

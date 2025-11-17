@@ -11,9 +11,13 @@ public class PackageStructureBuilder {
     private static final String APPLICATION_TEST = "/ApplicationTest.java";
     private static final String PACKAGE_SEPERATOR = "/";
 
-    public void moveFilesToPackage(Path projectPath, String packageName) throws IOException {
-        moveMainFiles(projectPath, packageName);
-        moveTestFiles(projectPath, packageName);
+    public void moveFilesToPackage(Path projectPath, String packageName) {
+        try {
+            moveMainFiles(projectPath, packageName);
+            moveTestFiles(projectPath, packageName);
+        } catch (IOException e) {
+            throw new RuntimeException("패키지 구조 생성 실패: " + e.getMessage(), e);
+        }
     }
 
     private void moveMainFiles(Path projectPath, String packageName) throws IOException {

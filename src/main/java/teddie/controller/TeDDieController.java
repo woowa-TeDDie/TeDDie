@@ -3,6 +3,7 @@ package teddie.controller;
 import teddie.domain.CommandLineArgs;
 import teddie.domain.Difficulty;
 import teddie.domain.Topic;
+import teddie.exception.HttpRequestException;
 import teddie.service.MissionService;
 import teddie.view.OutputView;
 
@@ -26,13 +27,17 @@ public class TeDDieController {
             String missionResult = generateMission(commandLineArgs);
             generateProject(commandLineArgs);
             outputView.printMission(missionResult);
+        } catch (HttpRequestException e) {
+            outputView.printError("[ERROR] 서버 연결 실패 - " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            outputView.printError("[ERROR] 잘못된 입력 - " + e.getMessage());
         } catch (Exception e) {
-            outputView.printError(e.getMessage());
+            outputView.printError("[ERROR] 알 수 없는 오류 - " + e.getMessage());
         }
 
     }
 
-    private String generateMission(CommandLineArgs commandLineArgs) throws Exception {
+    private String generateMission(CommandLineArgs commandLineArgs) {
         Topic topic = new Topic(commandLineArgs.getTopic());
         Difficulty difficulty = Difficulty.from(commandLineArgs.getDifficulty());
         return missionService.generateMission(topic, difficulty);

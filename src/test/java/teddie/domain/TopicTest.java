@@ -27,6 +27,6 @@ public class TopicTest {
         //when&than
         assertThatThrownBy(() -> new Topic(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("[ERROR] 주제는 빈 값일 수 없습니다.");
+                .hasMessageContaining("주제는 빈 값일 수 없습니다.");
     }
 }

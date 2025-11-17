@@ -22,7 +22,7 @@ public class MissionService {
         this.ragClient = ragClient;
     }
 
-    public String generateMission(Topic topic, Difficulty difficulty) throws Exception {
+    public String generateMission(Topic topic, Difficulty difficulty) {
         List<RagResult> ragResults = ragClient.search(
                 topic.getValue(),
                 3

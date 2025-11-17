@@ -55,7 +55,7 @@ public class DifficultyTest {
         //when&then
         assertThatThrownBy(() -> Difficulty.from(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("[ERROR] 유효하지 않은 난이도입니다.");
+                .hasMessageContaining("유효하지 않은 난이도입니다.");
     }
 
     @DisplayName("빈 값 입력 시 예외 발생")
@@ -67,6 +67,6 @@ public class DifficultyTest {
         //when&then
         assertThatThrownBy(() -> Difficulty.from(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("[ERROR] 난이도는 빈 문자열일 수 없습니다.");
+                .hasMessageContaining("난이도는 빈 문자열일 수 없습니다.");
     }
 }

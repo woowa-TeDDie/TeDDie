@@ -7,7 +7,7 @@ record Choice(Message message) {
 
     private void validateEmpty(Message message) {
         if (message == null) {
-            throw new IllegalArgumentException("[ERROR] API 응답에 message가 없습니다.");
+            throw new IllegalArgumentException("API 응답에 message가 없습니다.");
         }
     }
 
