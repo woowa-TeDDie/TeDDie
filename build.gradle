@@ -17,7 +17,7 @@ java {
 }
 
 application {
-    mainClass = 'TeDDie.Application'
+    mainClass = 'teddie.Application'
 }
 
 dependencies {
