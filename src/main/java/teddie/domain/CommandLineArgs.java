@@ -15,10 +15,8 @@ public class CommandLineArgs {
 
     private Map<String, String> parseArgs(String[] args) {
         Map<String, String> arg = new HashMap<>();
-        for (int i = 0; i < args.length; i += 2) {
-            if(i + 1 < args.length) {
-                arg.put(args[i], args[i+1]);
-            }
+        for (int i = 0; i + 1 < args.length; i += 2) {
+            arg.put(args[i], args[i + 1]);
         }
         return arg;
     }

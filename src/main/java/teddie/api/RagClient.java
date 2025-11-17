@@ -30,27 +30,31 @@ public class RagClient {
         return parseSearchResponse(responseJson);
     }
 
-    private String buildSearchRequest(String query, int topK) throws Exception {
+    private String buildSearchRequest(String query, int topK) {
         JsonObject requestBody = new JsonObject();
         requestBody.addProperty(QUERY, query);
         requestBody.addProperty(TOP_K, topK);
         return gson.toJson(requestBody);
     }
 
-    private List<RagResult> parseSearchResponse(String responseJson) throws Exception {
+    private List<RagResult> parseSearchResponse(String responseJson) {
         JsonObject response = gson.fromJson(responseJson, JsonObject.class);
         JsonArray results = response.getAsJsonArray(RESULTS);
 
         List<RagResult> ragResults = new ArrayList<>();
         for (int i = 0; i < results.size(); i++) {
             JsonObject item = results.get(i).getAsJsonObject();
-            ragResults.add(new RagResult(
-                    item.get(REPO).getAsString(),
-                    item.get(TEXT).getAsString(),
-                    item.get(URL).getAsString(),
-                    item.get(SIMILARITY_SCORE).getAsDouble()
-            ));
+            ragResults.add(parseItem(item));
         }
         return ragResults;
+    }
+
+    private RagResult parseItem(JsonObject item) {
+        return new RagResult(
+                item.get(REPO).getAsString(),
+                item.get(TEXT).getAsString(),
+                item.get(URL).getAsString(),
+                item.get(SIMILARITY_SCORE).getAsDouble()
+        );
     }
 }
