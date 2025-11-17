@@ -39,12 +39,16 @@
 src/main/java/teddie/
  ├── Application.java
  ├── api/
- │   ├── ApiMessage.java
- │   ├── ApiRequest.java
- │   ├── HttpRequestSender.java
  │   ├── RagClient.java
- │   ├── RagResult.java
- │   └── RequestBodyBuilder.java
+ │   └── dto/
+ │       ├── ApiMessage.java
+ │       ├── ApiRequest.java
+ │       └── RagResult.java
+ ├── common/
+ │   ├── config/
+ │   │   └── AppConfig.java
+ │   └── util/
+ │       └── HttpRequestSender.java
  ├── controller/
  │   ├── ProjectGeneratorController.java
  │   └── TeDDieController.java
@@ -53,17 +57,21 @@ src/main/java/teddie/
  │   ├── Difficulty.java
  │   └── Topic.java
  ├── generator/
- │   ├── FileReplacer.java
+ │   ├── PackageStatementReplacer.java
  │   ├── PackageStructureBuilder.java
  │   ├── ProjectWriter.java
  │   ├── ReadmeWriter.java
+ │   ├── SettingsGradleReplacer.java
  │   └── TemplateCopier.java
  ├── prompt/
  │   ├── SystemPrompt.java
  │   └── UserPrompt.java
  ├── service/
  │   ├── ApiResponse.java
- │   └── MissionService.java
+ │   ├── Choice.java
+ │   ├── Message.java
+ │   ├── MissionService.java
+ │   └── RequestBodyBuilder.java
  └── view/
      ├── ConsoleView.java
      └── OutputView.java
@@ -76,10 +84,14 @@ src/main/java/teddie/
 ---
 
 ### api/ - API 통신 계층
-- [X] **HttpRequestSender**: HTTP/1.1 POST 요청 전송
-- [X] **RequestBodyBuilder**: LLM API 요청 JSON 생성
 - [X] **RagClient**: RAG API 호출 및 결과 수신
-- [X] **ApiRequest/ApiMessage/RagResult**: 요청/응답 데이터 구조 (Record)
+- [X] **dto/ApiRequest**: LLM API 요청 데이터 구조 (Record)
+- [X] **dto/ApiMessage**: API 메시지 데이터 구조 (Record)
+- [X] **dto/RagResult**: RAG 응답 데이터 구조 (Record)
+
+### common/ - 공통 유틸리티 계층
+- [X] **config/AppConfig**: 애플리케이션 설정 및 의존성 주입
+- [X] **util/HttpRequestSender**: HTTP/1.1 POST 요청 전송
 
 ### controller/ - 흐름 제어 계층
 - [X] **TeDDieController**: CLI 인자 파싱 및 전체 흐름 제어
@@ -94,18 +106,22 @@ src/main/java/teddie/
 - [X] **TemplateCopier**: 템플릿 디렉토리 복사
 - [X] **ProjectWriter**: 생성된 프로젝트 구조화
 - [X] **ReadmeWriter**: README.md 파일 생성
-- [X] **FileReplacer**: 파일 내용 치환
+- [X] **PackageStatementReplacer**: 패키지 선언문 치환
+- [X] **SettingsGradleReplacer**: settings.gradle 파일 치환
 - [X] **PackageStructureBuilder**: 패키지 구조 생성
 
 ### prompt/ - 프롬프트 관리 계층
 - [X] **SystemPrompt**: LLM 시스템 프롬프트 관리
 - [X] **UserPrompt**: RAG 결과 기반 사용자 프롬프트 생성
 
-###  service/ - 비즈니스 로직 계층
+### service/ - 비즈니스 로직 계층
 - [X] **MissionService**: 미션 생성 핵심 로직
+- [X] **RequestBodyBuilder**: LLM API 요청 JSON 생성
 - [X] **ApiResponse**: LLM 응답 파싱
+- [X] **Choice**: API 응답 choice 객체
+- [X] **Message**: API 응답 message 객체
 
-###  view/ - 출력 계층
+### view/ - 출력 계층
 - [X] **ConsoleView**: 콘솔 출력 담당
 - [X] **OutputView**: 출력 포맷팅
 
@@ -130,35 +146,41 @@ src/main/java/teddie/
 ┌─────────────────────────────────────────────────────────────┐
 │              teddie Application (Java 21 + TDD)             │
 │                                                             │
-│  ┌─────────────────┐        ┌───────────────────────────┐  │
-│  │   controller/   │        │        service/           │  │
-│  │ TeDDieController│──────> │     MissionService        │  │
-│  │ ProjectGenerator│        │      ApiResponse          │  │
-│  │   Controller    │        └───────────────────────────┘  │
-│  └─────────────────┘                    │                  │
-│          │                              │                  │
-│          │                    ┌─────────┴──────────┐       │
-│          │                    ▼                    ▼       │
-│          │           ┌──────────────┐    ┌──────────────┐  │
-│          │           │     api/     │    │   prompt/    │  │
-│          │           │  RagClient   │    │ SystemPrompt │  │
-│          │           │HttpRequest   │    │  UserPrompt  │  │
-│          │           │   Sender     │    └──────────────┘  │
-│          │           │RequestBody   │                      │
-│          │           │   Builder    │                      │
-│          │           └──────────────┘                      │
+│  ┌─────────────────┐        ┌───────────────────────────┐   │
+│  │   controller/   │        │        service/           │   │
+│  │ TeDDieController│──────> │     MissionService        │   │
+│  │ ProjectGenerator│        │  RequestBodyBuilder       │   │
+│  │   Controller    │        │  ApiResponse/Choice/Msg   │   │
+│  └─────────────────┘        └───────────────────────────┘   │
+│          │                              │                   │
+│          │                    ┌─────────┴──────────┐        │
+│          │                    ▼                    ▼        │
+│          │           ┌──────────────┐    ┌──────────────┐   │
+│          │           │     api/     │    │   prompt/    │   │
+│          │           │  RagClient   │    │ SystemPrompt │   │
+│          │           │  dto/        │    │  UserPrompt  │   │
+│          │           └──────────────┘    └──────────────┘   │
+│          │                    │                             │
+│          │                    ▼                             │
+│          │           ┌──────────────┐                       │
+│          │           │   common/    │                       │
+│          │           │  AppConfig   │                       │
+│          │           │HttpRequest   │                       │
+│          │           │   Sender     │                       │
+│          │           └──────────────┘                       │
 │          │                                                  │
-│          ├───────────> generator/                          │
-│          │             TemplateCopier, ProjectWriter       │
-│          │             ReadmeWriter, FileReplacer          │
-│          │             PackageStructureBuilder             │
+│          ├───────────> generator/                           │
+│          │             TemplateCopier, ProjectWriter        │
+│          │             ReadmeWriter, PackageStructureBuilder│
+│          │             PackageStatementReplacer             │
+│          │             SettingsGradleReplacer               │
 │          │                                                  │
-│          └───> view/                                       │
-│                ConsoleView, OutputView                     │1
+│          └───> view/                                        │
+│                ConsoleView, OutputView                      │
 │                                                             │
-│  ┌─────────────┐                                           │
-│  │   domain/   │  CommandLineArgs, Topic, Difficulty       │
-│  └─────────────┘                                           │
+│  ┌─────────────┐                                            │
+│  │   domain/   │  CommandLineArgs, Topic, Difficulty        │
+│  └─────────────┘                                            │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
                     │                           │
