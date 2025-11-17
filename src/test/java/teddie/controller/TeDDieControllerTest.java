@@ -68,7 +68,7 @@ public class TeDDieControllerTest {
     void 미션_생성_후_바탕화면에_프로젝트_생성() throws Exception {
         //given
         String[] args = {"--topic", "collection", "--difficulty", "easy"};
-        String missionResult = "## 미션";
+        String missionResult = "javacollection";
         when(mockService.generateMission(any(Topic.class), any(Difficulty.class)))
                 .thenReturn(missionResult);
 
@@ -77,7 +77,6 @@ public class TeDDieControllerTest {
 
         //then
         verify(mockProjectGeneratorController).createProject(
-                any(Path.class),
                 anyString(),
                 eq("collection"),
                 eq(missionResult)

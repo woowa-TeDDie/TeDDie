@@ -138,6 +138,6 @@ public class MissionServiceTest {
         );
         String systemPrompt = systemPromptCaptor.getValue();
         assertThat(systemPrompt).contains("TDD");
-        assertThat(systemPrompt).contains("teddie");
+        assertThat(systemPrompt).contains("TeDDie");
     }
 }

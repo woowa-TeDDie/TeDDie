@@ -22,7 +22,7 @@ public class TemplateCopier {
             createDirectories(destination);
             return;
         }
-        copyRegularFile(source, targetPath);
+        copyRegularFile(source, destination);
     }
 
     private Path getTemplatePath() {
@@ -41,11 +41,11 @@ public class TemplateCopier {
         }
     }
 
-    private void copyRegularFile(Path source, Path targetPath) {
+    private void copyRegularFile(Path source, Path destination) {
         try {
-            Files.copy(source, targetPath, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            throw new RuntimeException("[ERROR] 디렉토리가 생성되지 않았습니다.");
+            throw new RuntimeException("[ERROR] 파일 복사 실패: " + e.getMessage(), e);
         }
     }
 }
