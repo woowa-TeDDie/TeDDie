@@ -4,10 +4,12 @@ import teddie.controller.ProjectGeneratorController;
 import teddie.controller.TeDDieController;
 import teddie.generator.PackageStatementReplacer;
 import teddie.generator.PackageStructureBuilder;
+import teddie.generator.ProjectReplacer;
 import teddie.generator.ProjectWriter;
 import teddie.generator.ReadmeWriter;
 import teddie.generator.SettingsGradleReplacer;
 import teddie.generator.TemplateCopier;
+import teddie.generator.TestGenerator;
 import teddie.service.MissionService;
 import teddie.view.ConsoleView;
 import teddie.view.OutputView;
@@ -45,7 +47,15 @@ public class AppConfig {
     }
 
     public ProjectWriter projectWriter() {
-        return new ProjectWriter(fileReplacer(), readmeWriter(), settingsGradleReplacer());
+        return new ProjectWriter( readmeWriter(), projectReplacer(), testGenerator());
+    }
+
+    public ProjectReplacer projectReplacer() {
+        return new ProjectReplacer(fileReplacer(), settingsGradleReplacer());
+    }
+
+    public TestGenerator testGenerator() {
+        return new TestGenerator();
     }
 
     public SettingsGradleReplacer settingsGradleReplacer() {

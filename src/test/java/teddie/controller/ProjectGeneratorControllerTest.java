@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 import java.nio.file.Path;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import teddie.generator.PackageStructureBuilder;
 import teddie.generator.ProjectWriter;
 import teddie.generator.TemplateCopier;
+import teddie.service.MissionResponse;
+import teddie.service.TestCase;
 
 @ExtendWith(MockitoExtension.class)
 public class ProjectGeneratorControllerTest {
@@ -36,15 +39,19 @@ public class ProjectGeneratorControllerTest {
         // given
         String projectName = "test-project";
         String packageName = "testpackage";
-        String readmeContent = "test readme";
+        List<TestCase> testCases = List.of(
+                new TestCase("기능_테스트", "기능 테스트", "input", "output", false)
+        );
+        MissionResponse missionResponse = new MissionResponse("## 미션 내용", testCases);
 
         // when
-        generator.createProject(projectName, packageName, readmeContent);
+        generator.createProject(projectName, packageName, missionResponse);
 
         // then
         verify(mockTemplateCopier).copy(any(Path.class));
         verify(mockPackageBuilder).moveFilesToPackage(any(Path.class), eq(packageName));
         verify(mockProjectWriter).writeProject(any(Path.class), eq(projectName), eq(packageName));
-        verify(mockProjectWriter).writeREADME(any(Path.class), eq(readmeContent));
+        verify(mockProjectWriter).writeREADME(any(Path.class), eq("## 미션 내용"));
+        verify(mockProjectWriter).writeTestFile(any(Path.class), eq(packageName), eq(testCases));
     }
 }

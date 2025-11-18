@@ -1,24 +1,30 @@
 package teddie.generator;
 
 import java.nio.file.Path;
+import java.util.List;
+import teddie.service.TestCase;
 
 public class ProjectWriter {
-    private final PackageStatementReplacer packageStatementReplacer;
+    private final ProjectReplacer projectReplacer;
     private final ReadmeWriter readmeWriter;
-    private final SettingsGradleReplacer settingsGradleReplacer;
+    private final TestGenerator testGenerator;
 
-    public ProjectWriter(PackageStatementReplacer packageStatementReplacer, ReadmeWriter readmeWriter, SettingsGradleReplacer settingsGradleReplacer) {
-        this.packageStatementReplacer = packageStatementReplacer;
+
+    public ProjectWriter(ReadmeWriter readmeWriter, ProjectReplacer projectReplacer, TestGenerator testGenerator) {
         this.readmeWriter = readmeWriter;
-        this.settingsGradleReplacer = settingsGradleReplacer;
+        this.projectReplacer = projectReplacer;
+        this.testGenerator = testGenerator;
     }
 
     public void writeProject(Path projectPath, String projectName, String packageName) {
-        settingsGradleReplacer.replaceGradleProjectName(projectPath, projectName);
-        packageStatementReplacer.replacePackageState(projectPath, packageName);
+        projectReplacer.replaceAll(projectPath, projectName, packageName);
     }
 
     public void writeREADME(Path projectPath, String missionContent) {
         readmeWriter.createReadme(projectPath, missionContent);
+    }
+
+    public void writeTestFile(Path projectPath, String packageName, List<TestCase> testCases) {
+        testGenerator.generateTestFile(projectPath, packageName, testCases);
     }
 }

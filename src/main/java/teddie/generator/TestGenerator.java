@@ -1,6 +1,9 @@
 package teddie.generator;
 
 import teddie.service.TestCase;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class TestGenerator {
@@ -26,7 +29,19 @@ public class TestGenerator {
             }
             """;
 
-    public String generateTestCode(String packageName, List<TestCase> testCases) {
+    public void generateTestFile(Path projectPath, String packageName, List<TestCase> testCases) {
+        try {
+            String testContent = generateTestCode(packageName, testCases);
+            Path testFilePath = projectPath.resolve(
+                    "src/test/java/" + packageName + "/ApplicationTest.java"
+            );
+            Files.writeString(testFilePath, testContent);
+        } catch (IOException e) {
+            throw new RuntimeException("테스트 파일 생성 실패: " + e.getMessage(), e);
+        }
+    }
+
+    private String generateTestCode(String packageName, List<TestCase> testCases) {
         if (testCases.isEmpty()) {
             return String.format(TEST_TEMPLATE, packageName, generateDefaultTests());
         }

@@ -3,6 +3,7 @@ package teddie.controller;
 import teddie.generator.PackageStructureBuilder;
 import teddie.generator.ProjectWriter;
 import teddie.generator.TemplateCopier;
+import teddie.service.MissionResponse;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +22,7 @@ public class ProjectGeneratorController {
         this.projectWriter = projectWriter;
     }
 
-    public Path createProject(String projectName, String packageName, String readmeContent) {
+    public Path createProject(String projectName, String packageName, MissionResponse missionResponse) {
         Path baseDir = getDesktopPath();
         Path projectPath = baseDir.resolve(projectName);
         try {
@@ -29,7 +30,8 @@ public class ProjectGeneratorController {
             templateCopier.copy(projectPath);
             packageBuilder.moveFilesToPackage(projectPath, packageName);
             projectWriter.writeProject(projectPath, projectName, packageName);
-            projectWriter.writeREADME(projectPath, readmeContent);
+            projectWriter.writeREADME(projectPath, missionResponse.mission());
+            projectWriter.writeTestFile(projectPath, packageName, missionResponse.testCases());
         } catch (IOException e) {
             throw new RuntimeException("[ERROR] 프로젝트 생성 실패: " + e.getMessage(), e);
         }

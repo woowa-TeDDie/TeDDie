@@ -81,7 +81,7 @@ public class TeDDieControllerTest {
         verify(mockProjectGeneratorController).createProject(
                 anyString(),
                 eq("collection"),
-                eq("## 미션 내용")
+                eq(missionResponse)
         );
     }
 }

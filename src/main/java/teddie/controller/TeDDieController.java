@@ -49,7 +49,7 @@ public class TeDDieController {
         projectGeneratorController.createProject(
                 projectName,
                 topic.getValue(),
-                missionResponse.mission()
+                missionResponse
         );
     }
 }
