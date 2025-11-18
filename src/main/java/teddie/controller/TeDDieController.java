@@ -4,6 +4,7 @@ import teddie.domain.CommandLineArgs;
 import teddie.domain.Difficulty;
 import teddie.domain.Topic;
 import teddie.exception.HttpRequestException;
+import teddie.service.MissionResponse;
 import teddie.service.MissionService;
 import teddie.view.OutputView;
 
@@ -24,9 +25,9 @@ public class TeDDieController {
         try {
             CommandLineArgs commandLineArgs = new CommandLineArgs(args);
 
-            String missionResult = generateMission(commandLineArgs);
-            generateProject(commandLineArgs, missionResult);
-            outputView.printMission(missionResult);
+            MissionResponse missionResponse = generateMission(commandLineArgs);
+            generateProject(commandLineArgs, missionResponse);
+            outputView.printMission(missionResponse.mission());
         } catch (HttpRequestException e) {
             outputView.printError("[ERROR] 서버 연결 실패 - " + e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -34,18 +35,21 @@ public class TeDDieController {
         } catch (Exception e) {
             outputView.printError("[ERROR] 알 수 없는 오류 - " + e.getMessage());
         }
-
     }
 
-    private String generateMission(CommandLineArgs commandLineArgs) {
+    private MissionResponse generateMission(CommandLineArgs commandLineArgs) {
         Topic topic = new Topic(commandLineArgs.getTopic());
         Difficulty difficulty = Difficulty.from(commandLineArgs.getDifficulty());
         return missionService.generateMission(topic, difficulty);
     }
 
-    private void generateProject(CommandLineArgs commandLineArgs, String missionResult) {
+    private void generateProject(CommandLineArgs commandLineArgs, MissionResponse missionResponse) {  // ✅ 타입 변경
         Topic topic = new Topic(commandLineArgs.getTopic());
         String projectName = PROJECT_PREFIX + topic.getValue();
-        projectGeneratorController.createProject(projectName, topic.getValue(), missionResult);
+        projectGeneratorController.createProject(
+                projectName,
+                topic.getValue(),
+                missionResponse.mission()
+        );
     }
 }
