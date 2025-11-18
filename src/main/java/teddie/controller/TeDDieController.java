@@ -25,7 +25,7 @@ public class TeDDieController {
             CommandLineArgs commandLineArgs = new CommandLineArgs(args);
 
             String missionResult = generateMission(commandLineArgs);
-            generateProject(commandLineArgs);
+            generateProject(commandLineArgs, missionResult);
             outputView.printMission(missionResult);
         } catch (HttpRequestException e) {
             outputView.printError("[ERROR] 서버 연결 실패 - " + e.getMessage());
@@ -43,10 +43,9 @@ public class TeDDieController {
         return missionService.generateMission(topic, difficulty);
     }
 
-    private void generateProject(CommandLineArgs commandLineArgs) {
+    private void generateProject(CommandLineArgs commandLineArgs, String missionResult) {
         Topic topic = new Topic(commandLineArgs.getTopic());
-
         String projectName = PROJECT_PREFIX + topic.getValue();
-        projectGeneratorController.createProject(projectName, topic.getValue(), projectName);
+        projectGeneratorController.createProject(projectName, topic.getValue(), missionResult);
     }
 }
